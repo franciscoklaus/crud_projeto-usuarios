@@ -1,3 +1,9 @@
+<?php
+
+  require "config.php";
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -151,47 +157,36 @@
                   </tr>
                 </thead>
                 <tbody>
-
-                  <tr>
-                    <td><img src="dist/img/user1-128x128.jpg" alt="User Image" class="img-circle img-sm"></td>
-                    <td>Fulano</td>
-                    <td>fulano@hcode.com.br</td>
-                    <td>Sim</td>
-                    <td>02/04/2018</td>
-                    <td>
-                      <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
-                      <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>
-                      <img src="dist/img/user1-128x128.jpg" alt="User Image" class="img-circle img-sm">
-                    </td>
-                    <td>Fulano</td>
-                    <td>fulano@hcode.com.br</td>
-                    <td>Sim</td>
-                    <td>02/04/2018</td>
-                    <td>
-                      <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
-                      <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>
-                      <img src="dist/img/user1-128x128.jpg" alt="User Image" class="img-circle img-sm">
-                    </td>
-                    <td>Fulano</td>
-                    <td>fulano@hcode.com.br</td>
-                    <td>Sim</td>
-                    <td>02/04/2018</td>
-                    <td>
-                      <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
-                      <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
-                    </td>
-                  </tr>
-                  
+                  <?php
+                  //LISTANDO USUÁRIOS QUE JÁ ESTAO NO BANCO DE DADOS
+                  $sql = "SELECT * FROM users";
+                  $sql = $pdo->query($sql);
+                  if($sql->rowCount() >  0){
+                    foreach($sql->fetchAll() as $usuario){ ?>
+                    <tr>
+                      <td><img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($usuario['foto']); ?>" alt='User Image' class='img-circle img-sm'></td>
+                      <td><?php echo $usuario['nome'] ?></td>
+                      <td><?php echo $usuario['email'] ?></td>
+                      <td>Sim</td>
+                      <td>02/04/2018</td>
+                      <td>
+                      <?php echo '<a href="editar.php?id='.$usuario['id'].'" class="btn btn-primary btn-xs btn-flat">Editar</a>';?>
+                      <?php echo '<a href="apagar.php?id='.$usuario['id'].'" class="btn btn-danger btn-xs btn-flat">Excluir</a>'; ?>
+                      </td>
+                    </tr>
+                  <?php
+                  }
+                  ?>
+                  <?php
+                  }else {
+                    echo "<tr>";
+                    echo "<td colspan=6 style='text-align:center;'>";
+                    echo "Nao há usuários cadastrados";
+                    echo "</td>";
+                    echo "</tr>";
+                  }
+                  ?>
+                
                 </tbody>
               </table>
             </div>
@@ -554,6 +549,7 @@
   </footer>
 
 </div>
-
+<script src='assets/scripts.js' type='text/javascript'>
+</script>
 </body>
 </html>
